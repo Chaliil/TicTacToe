@@ -1,7 +1,7 @@
 import os
+import platform
 
-os.system('clear')
-
+#Globale Variablen
 spielfeld = ["",
             "1", "2", "3",
             "4", "5", "6",
@@ -9,6 +9,13 @@ spielfeld = ["",
 
 number = ""
 symbol = ""
+won = ""
+
+#Bildschirm leeren
+def clear():
+    ostype = platform.system()
+    print("ostype")
+    os.system('clear')
 
 # Spielfeld ausgeben
 def output (spielfeld = spielfeld):
@@ -48,15 +55,27 @@ def checkwon():
     if spielfeld[7] == spielfeld[5] == spielfeld[3]:
         return spielfeld[5]
 
+#Gewinnmechanik
+def winning():
+    global won
+    if(won):
+        if(won == 'X'):
+            player = player1
+        if(won == 'O'):
+            player = player2
+    return player
+
+#Festlegen der Spieler
 print("Who is Player one?")
 player1 = input()
 
 print("Who is Player two?")
 player2 = input()
 
+#Spielmechanik
 while(True):
 
-    os.system('clear')
+    clear()
     output(spielfeld)
     print()
     print(player1 + ' ist an der Reihe:')
@@ -66,14 +85,11 @@ while(True):
     checknumber(number, symbol)
 
     won = checkwon()
-    if(won):
-        if(won == 'X'):
-            player = player1
-        if(won == 'O'):
-            player = player2
+    winning()
+    if winning():
         break
 
-    os.system('clear')
+    clear()
     output(spielfeld)
     print()
     print(player2 + ' ist an der Reihe:')
@@ -84,15 +100,12 @@ while(True):
     output(spielfeld)
 
     won = checkwon()
-    if(won):
-        if(won == 'X'):
-            player = player1
-        if(won == 'O'):
-            player = player2
+    winning()
+    if winning():
         break
 
-os.system('clear')
-
+#Spielende
+clear()
 print()
 output(spielfeld)
 print()
