@@ -29,8 +29,8 @@ othername = ""
 host = False
 
 #set up Server and client Object
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(ADDR)
+# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# sock.bind(ADDR)
 
 #Handle connections from Clients
 def handle_client(conn, addr):
@@ -237,6 +237,7 @@ def recv_msg(conn):
 
 def onlinemech():
     global spielfeld
+    global PORT
 
     print("Do you want to be the host[1] or the client[2]")
     settings = input()
@@ -246,7 +247,7 @@ def onlinemech():
     elif settings == "2":
         print("Please enter a Server address")
         server_addr = input()
-        conn = sock.connect(server_addr)
+        conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((server_addr, PORT))
         am_server = False
 
     if am_server:
