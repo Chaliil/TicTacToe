@@ -21,6 +21,11 @@ number = ""
 symbol = ""
 won = ""
 player = ""
+msg = ""
+player2 = ""
+myname = ""
+othername = ""
+host = False
 
 #set up Server and client Object
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,6 +33,8 @@ server.bind(ADDR)
 
 #Handle connections from Clients
 def handle_client(conn, addr):
+    global msg
+
     print(f"{addr} connected to your game.")
 
     connected = True
@@ -40,9 +47,10 @@ def handle_client(conn, addr):
                 connected = False
 
             print(f"[{addr}] {msg}")
-            conn.send("Msg recieved".encode(format))
+            
     
     conn.close()
+    return msg
 
 #Start in Server Mode
 def startserver():
@@ -67,10 +75,13 @@ def send(msg):
 #Hosting Settings
 def hosting():
     global SERVER
+    global host
+
     while True:
         print("Do you want to be the host[1] or the client[2]")
         settings = input()
         if settings == "1":
+            host = True
             thread = threading.Thread(target=startserver)
             thread.daemon = True
             thread.start()
@@ -80,10 +91,11 @@ def hosting():
         if settings == "2":
             print("Please enter a Server address")
             SERVER = input()
+            server.connect(ADDR)
             break
         else:
             print("please enter a valid number")
-    return SERVER
+    return SERVER, host
 
 #Bildschirm leeren
 def clear():
@@ -159,57 +171,111 @@ def checktie():
       and (spielfeld[9] == 'X' or spielfeld[9] == 'O'):
         return ('tie')
 
+#Spielmechanik lokal
+def localmech():
+
+    global player1
+    global player2
+
+    #Festlegen der Spieler
+    print("Who is Player one?")
+    player1 = input()
+
+    print("Who is Player two?")
+    player2 = input()
+
+    #Rounds
+    while(True):
+        clear()
+        output(spielfeld)
+        print()
+        print(player1 + ' ist an der Reihe:')
+        print("gib eine im Spielfeld gezeigte Zahl ein:")
+        symbol = 'X'
+        number = input()
+        checknumber(number, symbol)
+        
+        winning()
+        if winning():
+            break
+
+        clear()
+        output(spielfeld)
+        print()
+        print(player2 + ' ist an der Reihe:')
+        print("gib eine im Spielfeld gezeigte Zahl ein:")
+        symbol = 'O'
+        number = input()
+        checknumber(number, symbol)
+        output(spielfeld)
+
+        winning()
+        if winning():
+            break
+
+#Spielmechanik online
+
+def onlinemech():
+    global msg
+
+    #Festlegen der Spieler
+    print("Who are you?")
+    myname = input()
+    send(myname)
+
+    while True:
+        if msg:
+            print(f"debug {msg}")
+            othername = msg
+            print(f"othername = {othername}")
+            break
+    
+    while True:
+        if othername:
+            print(f"You are playing with {othername}")
+            while True:
+                clear()
+                output(spielfeld)
+                print()
+                print(myname + ' ist an der Reihe:')
+                print("gib eine im Spielfeld gezeigte Zahl ein:")
+                symbol = 'X'
+                number = input()
+                checknumber(number, symbol)
+                
+                winning()
+                if winning():
+                    break
+
+                clear()
+                output(spielfeld)
+                print()
+                print(othername + ' ist an der Reihe:')
+                print("gib eine im Spielfeld gezeigte Zahl ein:")
+                symbol = 'O'
+                number = input()
+                checknumber(number, symbol)
+                output(spielfeld)
+
+                winning()
+                if winning():
+                    break
+                break
+
+
 #Multiplayer Settings
 while True:
     print("Do you want to play locally[1] or online[2]")
     settings = input()
     if settings == "1":
+        localmech()
         break
     if settings == "2":
         hosting()
+        onlinemech()
         break
     else:
         print("please enter a valid number")
-
-#Festlegen der Spieler
-print("Who is Player one?")
-player1 = input()
-
-print("Who is Player two?")
-player2 = input()
-
-#Spielmechanik lokal
-while(True):
-    clear()
-    output(spielfeld)
-    print()
-    print(player1 + ' ist an der Reihe:')
-    print("gib eine im Spielfeld gezeigte Zahl ein:")
-    symbol = 'X'
-    number = input()
-    checknumber(number, symbol)
-    
-    send(spielfeld)
-
-    winning()
-    if winning():
-        break
-
-    clear()
-    output(spielfeld)
-    print()
-    print(player2 + ' ist an der Reihe:')
-    print("gib eine im Spielfeld gezeigte Zahl ein:")
-    symbol = 'O'
-    number = input()
-    checknumber(number, symbol)
-    output(spielfeld)
-
-    send(spielfeld)
-
-    winning()
-    if winning():
-        break
 
 #Spielende
 clear()
