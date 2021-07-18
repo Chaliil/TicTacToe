@@ -3,6 +3,7 @@ import platform
 import socket
 import threading
 import random
+import time
 
 #Socket Variablen
 HEADER = 64
@@ -268,6 +269,7 @@ def onlinemech():
         am_server = False
 
     if am_server:
+        time.sleep(1)
         server_starts = bool(random.getrandbits(1))
         send(server_starts, conn)
         symbol = 'X'
