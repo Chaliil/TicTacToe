@@ -218,7 +218,9 @@ def send(msg, conn):
             msg = "True"
         else:
             msg = "False"
-        
+    elif type(msg) is list:
+        msg = " ".join(msg)
+
     print(f"sent {msg}")
 
     message = msg.encode(FORMAT)
@@ -245,6 +247,9 @@ def recv_msg(conn):
             msg = conn.recv(msg_length).decode(FORMAT)
             
             print(f"recieved {msg}")
+
+            if msg[0] == " ":
+                msg = msg.split(" ")
 
             if msg == "False":
                 msg = False
