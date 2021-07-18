@@ -229,11 +229,10 @@ def send(msg, conn):
 def listen_for_client():
     global ADDR
 
-    with sock as s:
-        s.listen()
-        conn, addr = s.accept()
-        print(f'{addr} connected')
-        return conn, addr
+    sock.listen()
+    conn, addr = sock.accept()
+    print(f'{addr} connected')
+    return conn, addr
 
 def recv_msg(conn):
     msg_length = conn.recv(HEADER).decode(FORMAT)
