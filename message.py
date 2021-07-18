@@ -219,14 +219,14 @@ def send(msg, conn):
         else:
             msg = "False"
         
-        print(f"sent {msg}")
+    print(f"sent {msg}")
 
-        message = msg.encode(FORMAT)
-        msg_length = len(message)
-        send_length = str(msg_length).encode(FORMAT)
-        send_length += b' ' * (HEADER - len(send_length))
-        conn.send(send_length)
-        conn.send(message)
+    message = msg.encode(FORMAT)
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b' ' * (HEADER - len(send_length))
+    conn.send(send_length)
+    conn.send(message)
 
 def listen_for_client():
     global ADDR
