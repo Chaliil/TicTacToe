@@ -300,9 +300,9 @@ def onlinemech():
         print('Du bist an der Reihe')
         number = input("gib eine im Spielfeld gezeigte Zahl ein: ")
         checknumber(number, symbol)
+        send(spielfeld, conn)
         if winning():
             break
-        send(spielfeld, conn)
         clear()
         output(spielfeld)
         print()
