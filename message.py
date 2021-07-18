@@ -235,17 +235,20 @@ def listen_for_client():
     return conn, addr
 
 def recv_msg(conn):
-    msg_length = conn.recv(HEADER).decode(FORMAT)
-    if msg_length:
-        msg_length = int(msg_length)
-        
-        msg = conn.recv(msg_length).decode(FORMAT)
-        
-        if msg == "False":
-            msg = False
-        elif msg == "True":
-            msg = True
-    return
+    while True:
+        msg_length = conn.recv(HEADER).decode(FORMAT)
+        if msg_length:
+            msg_length = int(msg_length)
+            
+            msg = conn.recv(msg_length).decode(FORMAT)
+            
+            if msg == "False":
+                msg = False
+            elif msg == "True":
+                msg = True
+
+            return msg
+            
 
 
 def onlinemech():
@@ -269,10 +272,10 @@ def onlinemech():
 
     if am_server:
         server_starts = bool(random.getrandbits(1))
+        time.sleep(1)
         send(server_starts, conn)
         symbol = 'X'
     else:
-        time.sleep(1)
         server_starts = recv_msg(conn)
         symbol = 'O'
 
