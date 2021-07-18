@@ -209,6 +209,8 @@ def localmech():
 
 #Sending Server Messages
 def send(msg):
+    global sock
+    
     if type(msg) is bool:
         if msg:
             msg = "True"
