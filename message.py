@@ -219,9 +219,9 @@ def send(msg):
         msg_length = len(message)
         send_length = str(msg_length).encode(FORMAT)
         send_length += b' ' * (HEADER - len(send_length))
-        sock.send(send_length)
-        sock.send(message)
-        print(sock.recv(2048))
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).send(send_length)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).send(message)
+        print(socket.socket(socket.AF_INET, socket.SOCK_STREAM).recv(2048))
 
 def listen_for_client():
     global ADDR
