@@ -92,11 +92,10 @@ def hosting():
 
 #Bildschirm leeren
 def clear():
-    # if(platform.system() == "Windows"):
-    #     os.system('cls')
-    # else:
-    #     os.system('clear')
-    print("")
+     if(platform.system() == "Windows"):
+         os.system('cls')
+     else:
+         os.system('clear')
 
 # Spielfeld ausgeben
 def output (spielfeld = spielfeld):
