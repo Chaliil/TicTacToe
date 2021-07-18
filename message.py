@@ -92,10 +92,11 @@ def hosting():
 
 #Bildschirm leeren
 def clear():
-    if(platform.system() == "Windows"):
-        os.system('cls')
-    else:
-        os.system('clear')
+    # if(platform.system() == "Windows"):
+    #     os.system('cls')
+    # else:
+    #     os.system('clear')
+    print("")
 
 # Spielfeld ausgeben
 def output (spielfeld = spielfeld):
@@ -218,6 +219,8 @@ def send(msg, conn):
         else:
             msg = "False"
         
+        print(f"sent {msg}")
+
         message = msg.encode(FORMAT)
         msg_length = len(message)
         send_length = str(msg_length).encode(FORMAT)
@@ -241,6 +244,8 @@ def recv_msg(conn):
             
             msg = conn.recv(msg_length).decode(FORMAT)
             
+            print(f"recieved {msg}")
+
             if msg == "False":
                 msg = False
             elif msg == "True":
@@ -277,6 +282,10 @@ def onlinemech():
         symbol = 'O'
 
     if server_starts and not am_server:
+        clear()
+        output(spielfeld)
+        print()
+        print('Der Gegner macht seinen Zug')
         spielfeld = recv_msg(conn)
     while True:
         clear()
