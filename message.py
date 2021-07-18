@@ -269,11 +269,11 @@ def onlinemech():
         am_server = False
 
     if am_server:
-        time.sleep(1)
         server_starts = bool(random.getrandbits(1))
         send(server_starts, conn)
         symbol = 'X'
     else:
+        time.sleep(1)
         server_starts = recv_msg(conn)
         symbol = 'O'
 
