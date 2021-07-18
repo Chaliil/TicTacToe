@@ -224,7 +224,6 @@ def send(msg, conn):
         send_length += b' ' * (HEADER - len(send_length))
         conn.send(send_length)
         conn.send(message)
-        print(conn.recv(2048))
 
 def listen_for_client():
     global ADDR
@@ -249,8 +248,6 @@ def recv_msg(conn):
 
             return msg
             
-
-
 def onlinemech():
     global spielfeld
     global PORT
