@@ -208,9 +208,9 @@ def localmech():
 #Spielmechanik online
 
 #Sending Server Messages
-def send(msg):
+def send(msg, conn):
     global sock
-    
+
     if type(msg) is bool:
         if msg:
             msg = "True"
@@ -221,9 +221,9 @@ def send(msg):
         msg_length = len(message)
         send_length = str(msg_length).encode(FORMAT)
         send_length += b' ' * (HEADER - len(send_length))
-        sock.send(send_length)
-        sock.send(message)
-        print(sock.recv(2048))
+        conn.send(send_length)
+        conn.send(message)
+        print(conn.recv(2048))
 
 def listen_for_client():
     global ADDR
@@ -269,7 +269,7 @@ def onlinemech():
 
     if am_server:
         server_starts = bool(random.getrandbits(1))
-        send(server_starts)
+        send(server_starts, conn)
         symbol = 'X'
     else:
         server_starts = recv_msg(conn)
@@ -288,7 +288,7 @@ def onlinemech():
         checknumber(number, symbol)
         if winning():
             break
-        send(spielfeld)
+        send(spielfeld, conn)
         clear()
         output(spielfeld)
         print()
