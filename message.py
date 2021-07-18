@@ -281,7 +281,7 @@ def onlinemech():
         server_starts = recv_msg(conn)
         symbol = 'O'
 
-    if server_starts and not am_server:
+    if server_starts == am_server:
         clear()
         output(spielfeld)
         print()
