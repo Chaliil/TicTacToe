@@ -29,8 +29,8 @@ othername = ""
 host = False
 
 #set up Server and client Object
-# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# sock.bind(ADDR)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind(ADDR)
 
 #Handle connections from Clients
 def handle_client(conn, addr):
@@ -219,15 +219,14 @@ def send(msg):
         msg_length = len(message)
         send_length = str(msg_length).encode(FORMAT)
         send_length += b' ' * (HEADER - len(send_length))
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).send(send_length)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).send(message)
-        print(socket.socket(socket.AF_INET, socket.SOCK_STREAM).recv(2048))
+        sock.send(send_length)
+        sock.send(message)
+        print(sock.recv(2048))
 
 def listen_for_client():
     global ADDR
 
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(ADDR)
+    with sock as s:
         s.listen()
         conn, addr = s.accept()
         print(f'{addr} connected')
@@ -251,6 +250,7 @@ def onlinemech():
     global spielfeld
     global PORT
     global ADDR
+    global sock
 
     print("Do you want to be the host[1] or the client[2]")
     settings = input()
@@ -261,7 +261,8 @@ def onlinemech():
     elif settings == "2":
         print("Please enter a Server address")
         server_addr = input()
-        conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((server_addr, PORT))
+        sock.connect((server_addr, PORT))
+        conn = sock
         am_server = False
 
     if am_server:
