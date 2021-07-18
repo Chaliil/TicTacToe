@@ -64,16 +64,6 @@ def startserver():
         thread.start()
         print(f"{addr} is playing with you.")
 
-#Sending Server Messages
-def send(msg):
-    message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b' ' * (HEADER - len(send_length))
-    sock.send(send_length)
-    sock.send(message)
-    print(sock.recv(2048))
-
 #Hosting Settings
 def hosting():
     global SERVER
@@ -217,6 +207,22 @@ def localmech():
 
 #Spielmechanik online
 
+#Sending Server Messages
+def send(msg):
+    if type(msg) is bool:
+        if msg:
+            msg = "True"
+        else:
+            msg = "False"
+        
+        message = msg.encode(FORMAT)
+        msg_length = len(message)
+        send_length = str(msg_length).encode(FORMAT)
+        send_length += b' ' * (HEADER - len(send_length))
+        sock.send(send_length)
+        sock.send(message)
+        print(sock.recv(2048))
+
 def listen_for_client():
     global ADDR
 
@@ -231,17 +237,25 @@ def recv_msg(conn):
     msg_length = conn.recv(HEADER).decode(FORMAT)
     if msg_length:
         msg_length = int(msg_length)
-        return conn.recv(msg_length).decode(FORMAT)
+        
+        msg = conn.recv(msg_length).decode(FORMAT)
+        
+        if msg == "False":
+            msg = False
+        elif msg == "True":
+            msg = True
     return
 
 
 def onlinemech():
     global spielfeld
     global PORT
+    global ADDR
 
     print("Do you want to be the host[1] or the client[2]")
     settings = input()
     if settings == "1":
+        print(ADDR)
         conn, addr = listen_for_client()
         am_server = True
     elif settings == "2":
